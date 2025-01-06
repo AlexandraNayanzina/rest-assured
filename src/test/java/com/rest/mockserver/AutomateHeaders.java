@@ -1,6 +1,7 @@
 package com.rest.mockserver;
 
 import io.restassured.http.Header;
+import io.restassured.http.Headers;
 import org.testng.annotations.Test;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.equalTo;
@@ -10,14 +11,14 @@ public class AutomateHeaders {
     Header header = new Header("headerName2", "value2");
     Header matchHeader = new Header("x-mock-match-request-headers", "headerName2");
 
+    Headers headers = new Headers(header, matchHeader);
 
     @Test
     public void multipleHeadersTest() {
 
         given()
                 .baseUri("https://1623b81a-ab10-403e-a861-f123939bc23b.mock.pstmn.io")
-                .header(header)
-                .header(matchHeader)
+                .headers(headers)
                 .log().all().
                 when()
                 .get("/get").
