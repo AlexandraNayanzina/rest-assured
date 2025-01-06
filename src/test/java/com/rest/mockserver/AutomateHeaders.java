@@ -27,7 +27,7 @@ public class AutomateHeaders {
 
         given()
                 .baseUri("https://1623b81a-ab10-403e-a861-f123939bc23b.mock.pstmn.io")
-                .headers(headersMap)
+                .header("headerName", "value2", "value1")
                 .log().all().
                 when()
                 .get("/get").
