@@ -27,14 +27,15 @@ public class AutomateHeaders {
 
         given()
                 .baseUri("https://1623b81a-ab10-403e-a861-f123939bc23b.mock.pstmn.io")
-                .header("headerName", "value2", "value1")
+                .headers(headersMap)
                 .log().all().
-                when()
+       when()
                 .get("/get").
-                then()
+       then()
                 .assertThat()
                 .log().all()
                 .statusCode(200)
-                .body("msg", equalTo("responseValue2"));
+                .body("msg", equalTo("responseValue2"))
+                .header("responseHeader2", "resValue2");
     }
 }
