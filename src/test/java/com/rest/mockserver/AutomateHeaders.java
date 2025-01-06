@@ -9,6 +9,7 @@ import java.util.HashMap;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.equalTo;
 import java.util.HashMap;
+import java.util.List;
 
 public class AutomateHeaders {
 
@@ -25,7 +26,7 @@ public class AutomateHeaders {
         headersMap.put("x-mock-match-request-headers", "headerName2");
 
 
-        given()
+        Headers resHeaders = given()
                 .baseUri("https://1623b81a-ab10-403e-a861-f123939bc23b.mock.pstmn.io")
                 .headers(headersMap)
                 .log().all().
@@ -36,6 +37,14 @@ public class AutomateHeaders {
                 .log().all()
                 .statusCode(200)
                 .body("msg", equalTo("responseValue2"))
-                .header("responseHeader2", "resValue2");
+                .header("responseHeader2", "resValue2")
+                .extract().headers();
+
+        System.out.println(resHeaders);
+
+        List<String> multipleHeaderValue = resHeaders.getValues("multiValueHeader");
+        for (String value: multipleHeaderValue){
+            System.out.println(value);
+        }
     }
 }
