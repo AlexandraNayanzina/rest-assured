@@ -1,12 +1,17 @@
 package com.rest;
 
+import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.with;
-import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+
 
 public class RequestSpecificationTest {
     Keys key = Keys.X_API_KEY;
@@ -18,12 +23,14 @@ public class RequestSpecificationTest {
         requestSpecification = with()
                 .baseUri("https://api.postman.com")
                 .header("X-api-key", key.getKey())
-                .header("Accept-Encoding", "gzip, deflate, br\n");
-
+                .header("Accept-Encoding", "gzip, deflate, br\n")
+                .log().all();
     }
 
     @Test
     public void validateStatusCodeTest() {
+        Response response = requestSpecification.get("/workspaces").then().log().all().extract().response();
+        assertThat(response.statusCode(), is(equalTo(200)));
         given().spec(requestSpecification).
         when().
                 get("/workspaces").
@@ -36,14 +43,9 @@ public class RequestSpecificationTest {
 
     @Test
     public void validateResponseTest() {
-        given().spec(requestSpecification)
-                        .log().all().
-        when()
-                .get("/workspaces").
-        then()
-                .assertThat()
-                .log().all()
-                .body("workspaces.name", hasItem("My Workspace"));
+        Response response = requestSpecification.get("/workspaces").then().log().all().extract().response();
+        assertThat(response.path("workspaces[0].name").toString(), equalTo("My Workspace"));
+
     }
 
 }
