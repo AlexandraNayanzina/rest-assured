@@ -1,16 +1,16 @@
-package com.rest;
+package com.rest.requestspecification;
 
+import com.rest.Keys;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.Matchers.equalTo;
 
-public class ExtractResponseTest {
+public class ExtractSingleValueFromResponseUsingJsonPathTest {
 
     @Test
-    public void assertResponseBodyTest() {
+    public void extractSingleValueFromResponseUsingPathTest() {
 
         Keys key = Keys.X_API_KEY;
 
@@ -27,12 +27,9 @@ public class ExtractResponseTest {
                 .extract()
                 .response();
 
-        System.out.println("Response: " + response.asString());
+        JsonPath jsonPath = new JsonPath(response.asString());
 
-
+        System.out.println("First workspace name: " + jsonPath.getString("workspaces[0].name"));
 
     }
-
-
 }
-

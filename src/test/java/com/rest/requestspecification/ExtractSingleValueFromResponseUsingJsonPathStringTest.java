@@ -1,18 +1,19 @@
-package com.rest;
+package com.rest.requestspecification;
 
-import io.restassured.response.Response;
+import com.rest.Keys;
+import io.restassured.path.json.JsonPath;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.given;
 
-public class ExtractSingleValueFromResponseUsingPathTest {
+public class ExtractSingleValueFromResponseUsingJsonPathStringTest {
 
     @Test
     public void extractSingleValueFromResponseUsingPathTest() {
 
         Keys key = Keys.X_API_KEY;
 
-        Response response = given()
+        String response = given()
                 .baseUri("https://api.postman.com")
                 .header("X-api-key", key.getKey())
                 .header("Accept-Encoding", "gzip, deflate, br\n").
@@ -23,9 +24,12 @@ public class ExtractSingleValueFromResponseUsingPathTest {
                 .assertThat()
                 .statusCode(200)
                 .extract()
-                .response();
+                .response()
+                .asString();
 
-        System.out.println("First workspace name: " + response.path("workspaces[0].name"));
+        String firstWorkspaseName = JsonPath.from(response).getString("workspaces[0].name");
+
+        System.out.println("First workspace name: " + firstWorkspaseName);
 
     }
 }

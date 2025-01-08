@@ -1,10 +1,9 @@
-package com.rest;
+package com.rest.requestspecification;
 
+import com.rest.Keys;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.when;
-import static org.hamcrest.Matchers.*;
 
 public class AssertResponseTest {
 

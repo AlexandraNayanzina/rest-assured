@@ -1,5 +1,6 @@
-package com.rest;
+package com.rest.requestspecification;
 
+import com.rest.Keys;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

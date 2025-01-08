@@ -1,5 +1,6 @@
-package com.rest;
+package com.rest.requestspecification;
 
+import com.rest.Keys;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.response.Response;
@@ -13,7 +14,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 
-public class DefaultRequestSpecificationTest {
+public class RequestSpecificationBuilderTest {
     Keys key = Keys.X_API_KEY;
     RequestSpecification requestSpecification;
 
