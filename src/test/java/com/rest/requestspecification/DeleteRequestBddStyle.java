@@ -6,18 +6,16 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
-import io.restassured.response.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.with;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static io.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.matchesPattern;
 
 
-public class PutRequestBddStyle {
+public class DeleteRequestBddStyle {
     Keys key = Keys.X_API_KEY;
 
     @BeforeClass
@@ -37,26 +35,18 @@ public class PutRequestBddStyle {
     }
 
     @Test
-    public void updatePostmanWorspace() {
+    public void deletePostmanWorspace() {
         String workspaceId = "148a6cc8-4543-43d1-9619-d0f954cb6fe4";
 
-        String payload = "{\"workspace\":\n" +
-                "    {\n" +
-                "            \"name\": \"My First Workspace UPDATED3\",\n" +
-                "            \"type\": \"personal\",\n" +
-                "            \"description\": \"Rest Assured created it\"\n" +
-                "        }\n" +
-                "}";
-
-        given()
-                .body(payload).
+        given().
         when()
-                .put("/workspaces/" + workspaceId).
+                .delete("/workspaces/" + workspaceId).
         then()
                 .assertThat()
                 .log().all()
-                .body("workspace.name", equalTo("My First Workspace UPDATED3"))
-                .body("workspace.id", equalTo(workspaceId));
+                .body("workspace.id", equalTo(workspaceId),
+                        "workspace.id", matchesPattern("([A-Za-z0-9]+(-[A-Za-z0-9]+)+)"));
+
 
 
     }
