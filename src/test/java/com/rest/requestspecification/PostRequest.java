@@ -11,8 +11,7 @@ import io.restassured.specification.RequestSpecification;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.requestSpecification;
+import static io.restassured.RestAssured.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -41,21 +40,17 @@ public class PostRequest {
 
         String payload = "{\"workspace\":\n" +
                 "    {\n" +
-                "            \"name\": \"My Workspace\",\n" +
+                "            \"name\": \"My First Workspace\",\n" +
                 "            \"type\": \"personal\",\n" +
                 "            \"description\": \"Rest Assured created it\"\n" +
                 "        }\n" +
                 "}";
 
-        given()
-                .body(payload).
-        when()
-                .post("/workspaces").
-        then()
-                .assertThat()
-                .body("workspace.name", equalTo("My Workspace"),
-                        "workspace.id", matchesPattern("([A-Za-z0-9]+(-[A-Za-z0-9]+)+)"));
-
+        Response response = with().
+                body(payload)
+                        .post("/workspaces").then().extract().response();
+        assertThat(response.<String>path("workspace.name"), equalTo("My First Workspace"));
+        assertThat(response.<String>path("workspace.id"), matchesPattern("([A-Za-z0-9]+(-[A-Za-z0-9]+)+)"));
 
     }
 
