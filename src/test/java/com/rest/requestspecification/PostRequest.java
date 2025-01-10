@@ -11,6 +11,8 @@ import io.restassured.specification.RequestSpecification;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.io.File;
+
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -38,18 +40,13 @@ public class PostRequest {
     @Test
     public void createPostmanWorspace() {
 
-        String payload = "{\"workspace\":\n" +
-                "    {\n" +
-                "            \"name\": \"My First Workspace\",\n" +
-                "            \"type\": \"personal\",\n" +
-                "            \"description\": \"Rest Assured created it\"\n" +
-                "        }\n" +
-                "}";
+        File file = new File("src/main/resources/CreateWorkspacePayload.json");
+
 
         Response response = with().
-                body(payload)
+                body(file)
                         .post("/workspaces").then().extract().response();
-        assertThat(response.<String>path("workspace.name"), equalTo("My First Workspace"));
+        assertThat(response.<String>path("workspace.name"), equalTo("My Third Workspace"));
         assertThat(response.<String>path("workspace.id"), matchesPattern("([A-Za-z0-9]+(-[A-Za-z0-9]+)+)"));
 
     }
