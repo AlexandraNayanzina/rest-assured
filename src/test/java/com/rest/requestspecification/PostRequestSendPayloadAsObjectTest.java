@@ -7,18 +7,20 @@ import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Objects;
 
-import static io.restassured.RestAssured.*;
+import static io.restassured.RestAssured.with;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.matchesPattern;
 
 
-public class PostRequest {
+public class PostRequestSendPayloadAsObjectTest {
     Keys key = Keys.X_API_KEY;
 
     @BeforeClass
@@ -40,13 +42,17 @@ public class PostRequest {
     @Test
     public void createPostmanWorkspace() {
 
-        File file = new File("src/main/resources/CreateWorkspacePayload.json");
-
+        HashMap <String, Object> payload = new HashMap<String, Object>();
+        HashMap <String, String> nestedObject = new HashMap<String, String>();
+        nestedObject.put("name", "My Fourth Workspace");
+        nestedObject.put("type", "personal");
+        nestedObject.put("description", "Rest Assured created it - Payload is an Object");
+        payload.put("workspace", nestedObject);
 
         Response response = with().
-                body(file)
+                body(payload)
                         .post("/workspaces").then().extract().response();
-        assertThat(response.<String>path("workspace.name"), equalTo("My Third Workspace"));
+        assertThat(response.<String>path("workspace.name"), equalTo("My Fourth Workspace"));
         assertThat(response.<String>path("workspace.id"), matchesPattern("([A-Za-z0-9]+(-[A-Za-z0-9]+)+)"));
 
     }
